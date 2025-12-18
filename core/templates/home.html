@@ -520,8 +520,9 @@
         <li><a href="product_list.html">All Products</a></li>
         <li><a href="#">Categories</a></li>
         <li><a href="#">How it Works</a></li>
-        <li><a href="dashboard.html">My Dashboard</a></li>
-        <li><a href="#">Become a Seller</a></li>
+        <li><a href="{% url "accounts:auth" %}">Login / Signup</a></li>
+        <li><a href="{% url "accounts:dashboard" %}">My Dashboard</a></li>
+        <li><a href="{% url "products:cart" %}">Cart</a></li>
       </ul>
     </nav>
 
