@@ -1,0 +1,1392 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tradehub | Nigeria's B2B Wholesale Platform</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      /* --- CSS VARIABLES & RESET --- */
+      :root {
+        --primary: #ff6b35;
+        --primary-hover: #e55a2b;
+        --secondary: #1a2b4a;
+        --text-dark: #333333;
+        --text-light: #666666;
+        --white: #ffffff;
+        --light-grey: #f5f5f5;
+        --border: #e0e0e0;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--text-dark);
+        background: var(--white);
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Poppins", sans-serif;
+        color: var(--secondary);
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: var(--transition);
+      }
+      ul {
+        list-style: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        font-family: "Inter", sans-serif;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: var(--white);
+      }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+      .btn-outline {
+        border: 2px solid var(--white);
+        color: var(--white);
+        background: transparent;
+      }
+      .btn-outline:hover {
+        background: var(--white);
+        color: var(--secondary);
+      }
+      .section-padding {
+        padding: 60px 0;
+      }
+
+      /* --- HEADER & NAV --- */
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        z-index: 999;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+      .header.scrolled {
+        padding: 10px 0;
+      }
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+        transition: var(--transition);
+      }
+      .header.scrolled .nav-container {
+        height: 60px;
+      }
+
+      .logo {
+        font-family: "Poppins", sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .logo span {
+        color: var(--primary);
+      }
+
+      .search-bar {
+        display: none;
+      } /* Mobile hidden initially */
+
+      .desktop-nav {
+        display: none;
+        gap: 30px;
+        align-items: center;
+        font-weight: 500;
+      }
+      .desktop-nav a:hover {
+        color: var(--primary);
+      }
+
+      .mobile-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .menu-btn {
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--secondary);
+      }
+
+      /* Sidebar Navigation */
+      .sidebar-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 280px;
+        height: 100vh;
+        background: var(--secondary);
+        transform: translateX(100%);
+        transition: var(--transition);
+        z-index: 1000;
+        padding: 20px;
+        color: var(--white);
+      }
+      .sidebar-nav.active {
+        transform: translateX(0);
+      }
+      .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+      }
+      .sidebar-links li {
+        margin-bottom: 20px;
+      }
+      .sidebar-links a {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .sidebar-links a:hover {
+        color: var(--primary);
+      }
+
+      .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+        z-index: 998;
+      }
+      .backdrop.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* --- HERO SECTION --- */
+      .hero {
+        background: linear-gradient(
+            rgba(26, 43, 74, 0.5),
+            rgba(26, 43, 74, 0.5)
+          ),
+          url("./static/img/hero-img.png");
+        background-size: cover;
+        background-position: center;
+        color: var(--white);
+        padding: 100px 0 60px;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .hero h1 {
+        color: var(--white);
+        font-size: 32px;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      .hero h1 span {
+        color: var(--primary);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.67);
+      }
+      .hero p {
+        font-size: 16px;
+        margin-bottom: 30px;
+        text-align: center;
+        opacity: 0.9;
+      }
+      .hero-btns {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      /* --- CATEGORIES --- */
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+      }
+
+      .cat-card {
+        aspect-ratio: 3 / 4; /* perfect square */
+        background: var(--light-grey);
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        transition: var(--transition);
+        cursor: pointer;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cat-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .cat-card:hover {
+        transform: translateY(-5px);
+        background: var(--white);
+        box-shadow: var(--shadow);
+      }
+      .cat-icon {
+        font-size: 30px;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+      .cat-name {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      /* --- PRODUCTS --- */
+      .filter-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+      .filter-btn {
+        padding: 8px 20px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: var(--white);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--secondary);
+        color: var(--white);
+        border-color: var(--secondary);
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      .product-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: var(--transition);
+        position: relative;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+      }
+      .product-img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+      }
+      .product-info {
+        padding: 15px;
+      }
+      .product-name {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .product-price {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 5px;
+      }
+      .min-order {
+        font-size: 12px;
+        color: var(--text-light);
+        display: block;
+        margin-bottom: 10px;
+      }
+      .verified-badge {
+        font-size: 11px;
+        color: #4caf50;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        margin-bottom: 10px;
+      }
+
+      /* --- HOW IT WORKS & STATS --- */
+      .steps-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 40px;
+      }
+      .step-card {
+        text-align: center;
+      }
+      .step-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 107, 53, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        color: var(--primary);
+        font-size: 24px;
+      }
+
+      .stats-section {
+        background: var(--secondary);
+        color: var(--white);
+        padding: 60px 0;
+        margin-top: 60px;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        text-align: center;
+      }
+      .stat-number {
+        font-size: 36px;
+        font-weight: 700;
+        color: var(--primary);
+        display: block;
+      }
+
+      /* --- FOOTER --- */
+      footer {
+        background: #152238;
+        color: #d1d1d1;
+        padding: 60px 0 20px;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      .footer-col h4 {
+        color: var(--white);
+        margin-bottom: 20px;
+      }
+      .footer-col ul li {
+        margin-bottom: 10px;
+      }
+      .footer-col a:hover {
+        color: var(--primary);
+      }
+      .copyright {
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 20px;
+        font-size: 14px;
+      }
+
+      /* --- RESPONSIVE BREAKPOINTS --- */
+      @media (min-width: 769px) {
+        .nav-container {
+          height: 90px;
+        }
+        .menu-btn {
+          display: none;
+        }
+        .desktop-nav {
+          display: flex;
+        }
+        .search-bar {
+          display: block;
+          width: 400px;
+          padding: 10px 15px;
+          border: 1px solid #ddd;
+          border-radius: 20px;
+        }
+
+        .hero h1 {
+          font-size: 48px;
+        }
+        .category-grid {
+          grid-template-columns: repeat(6, 1fr);
+        }
+        .product-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .steps-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .stats-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .footer-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header" id="header">
+      <div class="container nav-container">
+        <div class="mobile-controls">
+          <a href="{% url "core:home" %}" class="logo"><span>Tradehub</span></a>
+        </div>
+
+        <input
+          type="text"
+          class="search-bar"
+          placeholder="Search products, brands, or categories..."
+        />
+
+        <nav class="desktop-nav">
+          <a href="{% url "core:home" %}">Home</a>
+          <a href="{% url "products:product_list" %}">Products</a>
+          <a href="{% url "accounts:auth" %}"><i class="far fa-user"></i></a>
+          <a href="checkout.html"><i class="fas fa-shopping-cart"></i></a>
+        </nav>
+        <i class="fas fa-bars menu-btn" id="menuBtn"></i>
+      </div>
+    </header>
+
+    <!-- Sidebar Menu -->
+    <div class="backdrop" id="backdrop"></div>
+    <nav class="sidebar-nav" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span>Tradehub</span> 
+        </div>
+        <i
+          class="fas fa-times"
+          id="closeSidebar"
+          style="cursor: pointer; font-size: 20px"
+        ></i>
+      </div>
+      <ul class="sidebar-links">
+        <li><a href="{% url "core:home" %}">Home</a></li>
+        <li><a href="product_list.html">All Products</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">How it Works</a></li>
+        <li><a href="dashboard.html">My Dashboard</a></li>
+        <li><a href="#">Become a Seller</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <h1>
+          Tradehub: <br /><span>Nigeria's Premier B2B Wholesale Platform</span>
+        </h1>
+        <p>
+          Connect directly with 500+ Verified Aba Market Traders. Factory
+          Prices. <br />
+          3-Day Nationwide Delivery.
+        </p>
+        <div class="hero-btns">
+          <a href="product_list.html" class="btn btn-primary"
+            >Browse Products</a
+          >
+          <a href="#" class="btn btn-outline">Become a Seller</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="section-padding">
+
+      <div class="container">
+        <h2 style="margin-bottom: 30px; text-align: center">
+          Women Clothing
+        </h2>
+
+        <div class="category-grid">
+
+          <!-- 6 Categories -->
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg" alt="">
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/994517/pexels-photo-994517.jpeg">
+
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/1381556/pexels-photo-1381556.jpeg">
+
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg" alt="">
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg" alt="">
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg" alt="">
+          </div>
+
+
+          <!--neww 1-->
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/1758144/pexels-photo-1758144.jpeg" alt="">
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/972995/pexels-photo-972995.jpeg">
+
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/1267360/pexels-photo-1267360.jpeg">
+
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://images.pexels.com/photos/2043590/pexels-photo-2043590.jpeg" alt="">
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="" alt="">
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-scroll cat-icon"></i>
+            <div class="cat-name">Fabrics & Textiles</div>
+          </div>
+
+          <!--end of neww 1-->
+
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2 style="margin-bottom: 30px; text-align: center">
+          Men Clothing
+        </h2>
+        <div class="category-grid">
+          <!-- 6 Categories -->
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-female cat-icon"></i>
+            <div class="cat-name">Women's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-tshirt cat-icon"></i>
+            <div class="cat-name">Men's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shoe-prints cat-icon"></i>
+            <div class="cat-name">Shoes & Footwear</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shopping-bag cat-icon"></i>
+            <div class="cat-name">Bags & Luggage</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-glasses cat-icon"></i>
+            <div class="cat-name">Accessories</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-scroll cat-icon"></i>
+            <div class="cat-name">Fabrics & Textiles</div>
+          </div>
+
+          <!--neww 2-->
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-female cat-icon"></i>
+            <div class="cat-name">Women's Clothing</div>
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://picsum.photos/seed/shoes/">
+
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <img src="https://picsum.photos/seed/shoes/">
+
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shopping-bag cat-icon"></i>
+            <div class="cat-name">Bags & Luggage</div>
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-glasses cat-icon"></i>
+            <div class="cat-name">Accessories</div>
+          </div>
+
+
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-scroll cat-icon"></i>
+            <div class="cat-name">Fabrics & Textiles</div>
+          </div>
+
+          <!--end of neww 2-->
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2 style="margin-bottom: 30px; text-align: center">
+          Shoes & Footwear
+        </h2>
+        <div class="category-grid">
+          <!-- 6 Categories -->
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-female cat-icon"></i>
+            <div class="cat-name">Women's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-tshirt cat-icon"></i>
+            <div class="cat-name">Men's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shoe-prints cat-icon"></i>
+            <div class="cat-name">Shoes & Footwear</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shopping-bag cat-icon"></i>
+            <div class="cat-name">Bags & Luggage</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-glasses cat-icon"></i>
+            <div class="cat-name">Accessories</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-scroll cat-icon"></i>
+            <div class="cat-name">Fabrics & Textiles</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2 style="margin-bottom: 30px; text-align: center">
+          Bags & Luggage
+        </h2>
+        <div class="category-grid">
+          <!-- 6 Categories -->
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-female cat-icon"></i>
+            <div class="cat-name">Women's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-tshirt cat-icon"></i>
+            <div class="cat-name">Men's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shoe-prints cat-icon"></i>
+            <div class="cat-name">Shoes & Footwear</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shopping-bag cat-icon"></i>
+            <div class="cat-name">Bags & Luggage</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-glasses cat-icon"></i>
+            <div class="cat-name">Accessories</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-scroll cat-icon"></i>
+            <div class="cat-name">Fabrics & Textiles</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2 style="margin-bottom: 30px; text-align: center">
+          Accessories
+        </h2>
+        <div class="category-grid">
+          <!-- 6 Categories -->
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-female cat-icon"></i>
+            <div class="cat-name">Women's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-tshirt cat-icon"></i>
+            <div class="cat-name">Men's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shoe-prints cat-icon"></i>
+            <div class="cat-name">Shoes & Footwear</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shopping-bag cat-icon"></i>
+            <div class="cat-name">Bags & Luggage</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-glasses cat-icon"></i>
+            <div class="cat-name">Accessories</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-scroll cat-icon"></i>
+            <div class="cat-name">Fabrics & Textiles</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2 style="margin-bottom: 30px; text-align: center">
+          Fabrics & Textiles
+        </h2>
+        <div class="category-grid">
+          <!-- 6 Categories -->
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-female cat-icon"></i>
+            <div class="cat-name">Women's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-tshirt cat-icon"></i>
+            <div class="cat-name">Men's Clothing</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shoe-prints cat-icon"></i>
+            <div class="cat-name">Shoes & Footwear</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-shopping-bag cat-icon"></i>
+            <div class="cat-name">Bags & Luggage</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-glasses cat-icon"></i>
+            <div class="cat-name">Accessories</div>
+          </div>
+          <div
+            class="cat-card"
+            onclick="window.location.href='product_list.html'"
+          >
+            <i class="fas fa-scroll cat-icon"></i>
+            <div class="cat-name">Fabrics & Textiles</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Products -->
+    <section class="section-padding" style="background: var(--light-grey)">
+      <div class="container">
+        <h2 style="margin-bottom: 20px; text-align: center">
+          Trending Products
+        </h2>
+
+        <div class="filter-tabs">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="clothing">Clothing</button>
+          <button class="filter-btn" data-filter="shoes">Shoes</button>
+          <button class="filter-btn" data-filter="bags">Bags</button>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+          <!-- Product 1 -->
+          <div class="product-card" data-category="clothing">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/FF6B35/white?text=Senator+Wear"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Men's Senator Wear Complete</h3>
+                <div class="product-price">₦8,500</div>
+                <span class="min-order">Min. Order: 20 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+          <!-- Product 2 -->
+          <div class="product-card" data-category="shoes">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/1A2B4A/white?text=Leather+Shoes"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Handmade Leather Loafers</h3>
+                <div class="product-price">₦12,000</div>
+                <span class="min-order">Min. Order: 10 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+          <!-- Product 3 -->
+          <div class="product-card" data-category="clothing">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/4CAF50/white?text=Ankara+Gown"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Ankara Shift Dress Bulk</h3>
+                <div class="product-price">₦4,500</div>
+                <span class="min-order">Min. Order: 50 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+          <!-- Product 4 -->
+          <div class="product-card" data-category="bags">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/333333/white?text=Travel+Bag"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Large Travel Duffel Bag</h3>
+                <div class="product-price">₦6,000</div>
+                <span class="min-order">Min. Order: 15 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+          <!-- Product 5 -->
+          <div class="product-card" data-category="bags">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/333333/white?text=Travel+Bag"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Large Travel Duffel Bag</h3>
+                <div class="product-price">₦6,000</div>
+                <span class="min-order">Min. Order: 15 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+          <!-- Product 6 -->
+          <div class="product-card" data-category="bags">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/333333/white?text=Travel+Bag"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Large Travel Duffel Bag</h3>
+                <div class="product-price">₦6,000</div>
+                <span class="min-order">Min. Order: 15 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+          <!--Product 7-->
+          <div class="product-card" data-category="bags">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/333333/white?text=Travel+Bag"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Large Travel Duffel Bag</h3>
+                <div class="product-price">₦6,000</div>
+                <span class="min-order">Min. Order: 15 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+          <!--Product 8-->
+          <div class="product-card" data-category="bags">
+            <a href="product_detail.html">
+              <img
+                src="https://placehold.co/400x400/333333/white?text=Travel+Bag"
+                alt="Product"
+                class="product-img"
+              />
+              <div class="product-info">
+                <h3 class="product-name">Large Travel Duffel Bag</h3>
+                <div class="product-price">₦6,000</div>
+                <span class="min-order">Min. Order: 15 pieces</span>
+                <div class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Seller
+                </div>
+                <button
+                  class="btn btn-primary"
+                  style="width: 100%; font-size: 12px; padding: 8px"
+                >
+                  Contact Seller
+                </button>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section-padding">
+      <div class="container">
+        <h2 style="text-align: center">How It Works</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-icon"><i class="fas fa-search"></i></div>
+            <h3>1. Browse</h3>
+            <p>Find products from verified wholesale traders.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon"><i class="fas fa-comments"></i></div>
+            <h3>2. Contact</h3>
+            <p>Chat directly with sellers to negotiate deals.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">
+              <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+            <h3>3. Order</h3>
+            <p>Pay securely through our escrow system.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon"><i class="fas fa-truck-fast"></i></div>
+            <h3>4. Receive</h3>
+            <p>Get fast delivery anywhere in Nigeria.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section" id="statsSection">
+      <div class="container">
+        <div class="stats-grid">
+          <div>
+            <span class="stat-number" data-target="50">0</span>
+            <p>Verified Traders</p>
+          </div>
+          <div>
+            <span class="stat-number" data-target="1000">0</span>
+            <p>Products Listed</p>
+          </div>
+          <div>
+            <span class="stat-number" data-target="3">0</span>
+            <p>States Covered</p>
+          </div>
+          <div>
+            <span class="stat-number" data-target="10">0</span>
+            <p>Day Avg Delivery</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>About Tradehub</h4>
+            <p>
+              Bridging the gap between Aba manufacturers and Nigerian retailers.
+              We ensure quality, trust, and speed.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url "core:home" %}">core:home</a></li>
+              <li><a href="product_list.html">Products</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Blog</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>For Sellers</h4>
+            <ul>
+              <li><a href="#">Join as Trader</a></li>
+              <li><a href="#">Seller Rules</a></li>
+              <li><a href="#">Success Stories</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li><i class="fas fa-envelope"></i> help@Tradehub.ng</li>
+              <li><i class="fas fa-phone"></i> +234 800 123 4567</li>
+              <li><i class="fas fa-map-marker-alt"></i> Aba, Abia State</li>
+            </ul>
+          </div>
+        </div>
+        <div class="copyright">
+          &copy; 2025 Tradehub Nigeria. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // --- 1. Sidebar Toggle ---
+      const menuBtn = document.getElementById("menuBtn");
+      const sidebar = document.getElementById("sidebar");
+      const backdrop = document.getElementById("backdrop");
+      const closeSidebar = document.getElementById("closeSidebar");
+      const body = document.body;
+
+      function toggleSidebar() {
+        sidebar.classList.toggle("active");
+        backdrop.classList.toggle("active");
+        body.style.overflow = sidebar.classList.contains("active")
+          ? "hidden"
+          : "auto";
+      }
+
+      menuBtn.addEventListener("click", toggleSidebar);
+      closeSidebar.addEventListener("click", toggleSidebar);
+      backdrop.addEventListener("click", toggleSidebar);
+
+      // --- 2. Sticky Header ---
+      const header = document.getElementById("header");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 80) {
+          header.classList.add("scrolled");
+        } else {
+          header.classList.remove("scrolled");
+        }
+      });
+
+      // --- 3. Product Filters (Tabs) ---
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      const productCards = document.querySelectorAll(".product-card");
+
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          // Remove active class
+          filterBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          const filterValue = btn.getAttribute("data-filter");
+
+          productCards.forEach((card) => {
+            if (
+              filterValue === "all" ||
+              card.getAttribute("data-category") === filterValue
+            ) {
+              card.style.display = "block";
+              // Add fade in animation
+              card.style.opacity = "0";
+              setTimeout(() => (card.style.opacity = "1"), 50);
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+
+      // --- 4. Stats Counter Animation ---
+      const statsSection = document.getElementById("statsSection");
+      const statNumbers = document.querySelectorAll(".stat-number");
+      let started = false;
+
+      const startCount = (el) => {
+        const target = +el.getAttribute("data-target");
+        const duration = 2000; // 2 seconds
+        const increment = target / (duration / 16); // 60fps
+
+        let current = 0;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            el.innerText = target + "+";
+            clearInterval(timer);
+          } else {
+            el.innerText = Math.ceil(current);
+          }
+        }, 16);
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !started) {
+            statNumbers.forEach((num) => startCount(num));
+            started = true;
+          }
+        },
+        { threshold: 0.5 }
+      );
+
+      observer.observe(statsSection);
+    </script>
+  </body>
+</html>

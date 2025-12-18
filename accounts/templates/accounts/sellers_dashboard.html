@@ -1,0 +1,1084 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seller Center | TradeHub</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      /* --- GLOBAL VARIABLES & RESET (Consistent with Buyer Dashboard) --- */
+      :root {
+        --primary: #ff6b35;
+        --primary-hover: #e55a2b;
+        --secondary: #1a2b4a;
+        --text-dark: #333333;
+        --text-light: #666666;
+        --white: #ffffff;
+        --bg-light: #f4f7fa;
+        --border: #e0e0e0;
+        --success: #4caf50;
+        --warning: #ffc107;
+        --info: #2196f3;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--text-dark);
+        background: var(--bg-light);
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Poppins", sans-serif;
+        color: var(--secondary);
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: var(--transition);
+      }
+
+      /* --- SIDEBAR --- */
+      .sidebar {
+        width: 260px;
+        background: var(--secondary);
+        color: var(--white);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: var(--transition);
+        z-index: 1000;
+        flex-shrink: 0;
+      }
+
+      .sidebar-header {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        padding: 0 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .logo {
+        font-family: "Poppins", sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .logo span {
+        color: var(--primary);
+      }
+
+      .sidebar-menu {
+        padding: 20px 0;
+        flex: 1;
+        list-style: none;
+        overflow-y: auto;
+      }
+
+      .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        border-left: 4px solid transparent;
+        transition: var(--transition);
+      }
+
+      .menu-item:hover,
+      .menu-item.active {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--white);
+        border-left-color: var(--primary);
+      }
+
+      .menu-item i {
+        width: 25px;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+
+      .sidebar-footer {
+        padding: 20px 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* --- MAIN CONTENT AREA --- */
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Top Header */
+      .top-header {
+        height: 80px;
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+        box-shadow: var(--shadow);
+        z-index: 900;
+      }
+
+      .toggle-btn {
+        font-size: 20px;
+        cursor: pointer;
+        color: var(--secondary);
+        display: none;
+      }
+
+      .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-left: auto;
+      }
+      .notification-btn {
+        position: relative;
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--text-light);
+      }
+      .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: var(--primary);
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+      }
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--border);
+      }
+      .user-info {
+        display: none;
+      }
+      @media (min-width: 768px) {
+        .user-info {
+          display: block;
+        }
+      }
+      .user-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--secondary);
+      }
+      .user-role {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      /* Page Content */
+      .page-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 30px;
+      }
+
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+      }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+      @media (min-width: 500px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (min-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .stat-card {
+        background: var(--white);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: var(--transition);
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+      }
+      .stat-info h5 {
+        color: var(--text-light);
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+      .stat-info h3 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--secondary);
+      }
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .icon-orange {
+        background: rgba(255, 107, 53, 0.1);
+        color: var(--primary);
+      }
+      .icon-blue {
+        background: rgba(33, 150, 243, 0.1);
+        color: var(--info);
+      }
+      .icon-green {
+        background: rgba(76, 175, 80, 0.1);
+        color: var(--success);
+      }
+      .icon-purple {
+        background: rgba(102, 51, 153, 0.1);
+        color: #663399;
+      }
+
+      /* Split Section (Table + Top Products) */
+      .split-section {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      @media (min-width: 1024px) {
+        .split-section {
+          grid-template-columns: 2fr 1fr;
+        }
+      }
+
+      /* Section Containers */
+      .section-container {
+        background: var(--white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 25px;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      /* Tables */
+      .table-responsive {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+      }
+      th {
+        text-align: left;
+        padding: 15px;
+        color: var(--text-light);
+        font-weight: 600;
+        font-size: 13px;
+        background: #f9f9f9;
+        border-bottom: 1px solid var(--border);
+      }
+      td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        color: var(--text-dark);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      .product-mini {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .product-mini img {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+
+      .status-badge {
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+      }
+      .status-pending {
+        background: rgba(255, 193, 7, 0.15);
+        color: #e6a800;
+      }
+      .status-shipped {
+        background: rgba(33, 150, 243, 0.15);
+        color: var(--info);
+      }
+      .status-paid {
+        background: rgba(76, 175, 80, 0.15);
+        color: var(--success);
+      }
+
+      .action-btn {
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: 0.2s;
+      }
+      .action-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      /* Top Products List */
+      .top-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .top-item:last-child {
+        border-bottom: none;
+      }
+      .top-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+        object-fit: cover;
+      }
+      .top-details h4 {
+        font-size: 14px;
+        margin-bottom: 3px;
+        color: var(--secondary);
+      }
+      .top-details span {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+      .top-price {
+        margin-left: auto;
+        font-weight: 700;
+        color: var(--success);
+        font-size: 14px;
+      }
+
+      @media (max-width: 768px) {
+        /* Section Containers */
+        .section-container {
+          padding: 15px;
+          border-radius: 8px;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        /* Tables */
+        th,
+        td {
+          padding: 10px;
+          font-size: 12px;
+        }
+
+        th {
+          font-size: 11px;
+        }
+
+        .table-responsive {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        /* Product mini */
+        .product-mini img {
+          width: 32px;
+          height: 32px;
+        }
+
+        /* Status badges */
+        .status-badge {
+          padding: 4px 8px;
+          font-size: 11px;
+        }
+
+        /* Action buttons */
+        .action-btn {
+          padding: 6px 8px;
+          font-size: 11px;
+        }
+
+        /* Top Products List */
+        .top-item {
+          gap: 10px;
+          padding: 12px 0;
+        }
+
+        .top-img {
+          width: 40px;
+          height: 40px;
+        }
+
+        .top-details h4 {
+          font-size: 13px;
+        }
+
+        .top-details span {
+          font-size: 11px;
+        }
+
+        .top-price {
+          font-size: 13px;
+        }
+      }
+
+      /* Add Product Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-overlay.active {
+        display: flex;
+      }
+      .modal {
+        background: white;
+        width: 500px;
+        max-width: 90%;
+        padding: 30px;
+        border-radius: 10px;
+        animation: slideUp 0.3s ease;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-family: inherit;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      /* Mobile Overlay (Sidebar Backdrop) */
+      .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+      }
+      .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 1024px) {
+        .sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          transform: translateX(-100%);
+          box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar.active {
+          transform: translateX(0);
+        }
+        .toggle-btn {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Mobile Sidebar Overlay -->
+    <div
+      class="sidebar-overlay"
+      id="sidebarOverlay"
+      onclick="toggleSidebar()"
+    ></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="{% url 'core:home' %}" class="logo"
+          ><span><i class="fas fa-boxes-packing"></i></span> TradeHub</a
+        >
+        <i
+          class="fas fa-times"
+          onclick="toggleSidebar()"
+          style="
+            margin-left: auto;
+            cursor: pointer;
+            font-size: 18px;
+            display: none;
+            color: white;
+          "
+          id="closeSidebar"
+        ></i>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="menu-item active">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </li>
+        <li class="menu-item"><i class="fas fa-box-open"></i> <a href="{% url "accounts:inventory" %}">Inventory</a> </li>
+        <li class="menu-item">
+          <i class="fas fa-clipboard-list"></i> Orders
+          <span
+            style="
+              background: var(--primary);
+              color: white;
+              font-size: 10px;
+              padding: 2px 6px;
+              border-radius: 10px;
+              margin-left: auto;
+            "
+            >5</span
+          >
+        </li>
+        <li class="menu-item"><i class="fas fa-comment-dots"></i> Messages</li>
+        <li class="menu-item"><i class="fas fa-wallet"></i> Wallet</li>
+        <li class="menu-item"><i class="fas fa-cog"></i> Store Settings</li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <a
+          href="{% url 'accounts:logout' %}"
+          class="menu-item"
+          style="color: #ff6b6b; padding-left: 0"
+        >
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div style="display: flex; align-items: center; gap: 15px">
+          <i class="fas fa-bars toggle-btn" onclick="toggleSidebar()"></i>
+          <h3 style="font-size: 18px">Seller Center</h3>
+        </div>
+
+        <div class="user-actions">
+          <div class="notification-btn">
+            <i class="far fa-bell"></i>
+            <span class="notification-badge">8</span>
+          </div>
+          <div class="user-profile">
+            <img
+              src="https://placehold.co/100x100/333/white?text=MC"
+              alt="User"
+              class="user-avatar"
+            />
+            <div class="user-info">
+              <div class="user-name">{{ user.first_name }}</div>
+              <div class="user-role">Verified Trader</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="page-content">
+        <div class="dashboard-header">
+          <div>
+            <p style="color: var(--text-dark); font-size: 24px">
+              Welcome back, <em><strong>{{ user.first_name }}!</strong></em>
+              <br />
+              here's what's happening today.
+            </p>
+            <br />
+            <h2 style="font-size: 20px">Store Overview</h2>
+          </div>
+          <button class="btn-primary" onclick="openModal()">
+            <i class="fas fa-plus"></i> Add Product
+          </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-info">
+              <h5>Total Revenue</h5>
+              <h3>₦{{ total_revenue|floatformat:0 }}</h3>
+            </div>
+            <div class="stat-icon icon-green">
+              <i class="fas fa-wallet"></i>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <h5>New Orders</h5>
+              <h3>{{ new_orders }}</h3>
+            </div>
+            <div class="stat-icon icon-orange">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <h5>Active Products</h5>
+              <h3>{{ active_products }}</h3>
+            </div>
+            <div class="stat-icon icon-blue"><i class="fas fa-box"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <h5>Store Rating</h5>
+              <h3>{{ store_rating }}/5.0</h3>
+            </div>
+            <div class="stat-icon icon-purple"><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="split-section">
+          <!-- Recent Orders Table -->
+          <div class="section-container">
+            <div class="section-header">
+              <h3>Recent Orders</h3>
+              <a
+                href="#"
+                style="color: var(--primary); font-size: 14px; font-weight: 600"
+                >View All</a
+              >
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order #</th>
+                    <th>Product Details</th>
+                    <th>Buyer</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order in recent_orders %}
+                  <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>
+                      <div class="product-mini">
+                        <img
+                          src="https://placehold.co/40x40/FF6B35/white?text=M"
+                          alt=""
+                        />
+                        <div>
+                          <div style="font-weight: 600">
+                            {{ order.product }}
+                          </div>
+                          <div style="font-size: 11px; color: #666">
+                            Qty: {{ order.quantity }}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ order.buyer }}</td>
+                    <td>
+                      <span class="status-badge status-{{ order.status }}">
+                        {{ order.status|title }}
+                      </span>
+                    </td>
+                    <td>
+                      <button class="action-btn">Ship</button>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="5" style="text-align: center">
+                      No orders yet
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Top Selling / Inventory Alert -->
+          <div class="section-container">
+            <div class="section-header">
+              <h3>Top Moving Stock</h3>
+            </div>
+
+            <div class="top-item">
+              <img
+                src="https://placehold.co/100x100/FF6B35/white?text=A"
+                class="top-img"
+              />
+              <div class="top-details">
+                <h4>Men's Senator Material</h4>
+                <span>500 sets sold this month</span>
+              </div>
+              <div class="top-price">₦4.2M</div>
+            </div>
+
+            <div class="top-item">
+              <img
+                src="https://placehold.co/100x100/1A2B4A/white?text=B"
+                class="top-img"
+              />
+              <div class="top-details">
+                <h4>Vintage Shirts</h4>
+                <span>320 pieces sold this month</span>
+              </div>
+              <div class="top-price">₦1.8M</div>
+            </div>
+
+            <div class="top-item">
+              <img
+                src="https://placehold.co/100x100/4CAF50/white?text=C"
+                class="top-img"
+              />
+              <div class="top-details">
+                <h4>Italian Wool</h4>
+                <span>150 yards sold this month</span>
+              </div>
+              <div class="top-price">₦900k</div>
+            </div>
+
+            <button
+              style="
+                width: 100%;
+                padding: 10px;
+                margin-top: 15px;
+                background: #f0f0f0;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 500;
+              "
+            >
+              View Inventory Analytics
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Add Product Modal -->
+    <div class="modal-overlay" id="productModal">
+      <div class="modal">
+        <form
+          method="post"
+          enctype="multipart/form-data"
+          action="{% url 'accounts:seller_add_product' %}"
+        >
+          {% csrf_token %}
+          <h3 style="margin-bottom: 20px; color: var(--secondary)">
+            Add New Inventory
+          </h3>
+          <div class="form-group">
+            <label>Product Name</label>
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="e.g. Cashmere Senator Material"
+              required
+            />
+          </div>
+          <div
+            class="form-group"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px"
+          >
+            <div>
+              <label>Wholesale Price (₦)</label>
+              <input
+                type="number"
+                class="form-control"
+                name="price"
+                placeholder="5000"
+                required
+              />
+            </div>
+
+            <div>
+              <label>Min Order Qty (MOQ)</label>
+              <input
+                type="number"
+                name="min_order_quantity"
+                class="form-control"
+                required
+                placeholder="20"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select name="category" class="form-control" required>
+              {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Upload Product Image</label>
+            <input type="file" name="image" class="form-control" required />
+            <div
+              style="
+                border: 2px dashed #ddd;
+                padding: 20px;
+                text-align: center;
+                border-radius: 6px;
+                cursor: pointer;
+                background: #f9f9f9;
+              "
+            >
+              <i
+                class="fas fa-cloud-upload-alt"
+                style="font-size: 24px; color: #999"
+              ></i>
+              <p style="font-size: 12px; color: #666; margin-top: 5px">
+                Click or drag to upload
+              </p>
+            </div>
+          </div>
+          <div
+            class="form-group"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px"
+          >
+            <div>
+              <label>Available Quantity</label>
+              <input
+                type="number"
+                name="available_quantity"
+                class="form-control"
+                required
+              />
+            </div>
+            <div>
+              <label>Low Stock Alert</label>
+              <input
+                type="number"
+                name="low_stock_threshold"
+                class="form-control"
+                value="5"
+              />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="action-btn" onclick="closeModal()">
+              Cancel
+            </button>
+            <button type="submit" class="btn-primary">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Sidebar Logic
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+      const closeBtn = document.getElementById("closeSidebar");
+
+      function toggleSidebar() {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+
+        // Show close button on mobile only
+        if (window.innerWidth <= 1024) {
+          closeBtn.style.display = sidebar.classList.contains("active")
+            ? "block"
+            : "none";
+        }
+      }
+
+      const modal = document.getElementById("productModal");
+
+      function openModal() {
+        modal.classList.add("active");
+      }
+
+      function closeModal() {
+        modal.classList.remove("active");
+      }
+
+      function saveProduct() {
+        const btn = document.querySelector(".modal .btn-primary");
+        const originalText = btn.innerHTML;
+
+        // Start animation
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        btn.disabled = true;
+
+        // Simulate a short delay for UX (optional)
+        setTimeout(() => {
+          closeModal(); // close the modal
+          btn.innerHTML = originalText; // reset button text
+          btn.disabled = false; // re-enable button
+
+          // Show confirmation alert
+          alert("Product added to inventory!");
+        }, 500); // 0.5s is enough for the "saving" effect
+      }
+
+      // Close modal if clicking outside
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      // Order Action Simulation
+      function markShipped(btn) {
+        if (
+          confirm("Confirm waybill dispatch? Tracking will be sent to buyer.")
+        ) {
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          setTimeout(() => {
+            const statusCell = btn.parentElement.previousElementSibling;
+            statusCell.innerHTML =
+              '<span class="status-badge status-shipped">Shipped</span>';
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+            btn.innerText = "Track";
+          }, 800);
+        }
+      }
+
+      // Close modal if clicking outside
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      // Resize reset
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 1024) {
+          sidebar.classList.remove("active");
+          overlay.classList.remove("active");
+          closeBtn.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

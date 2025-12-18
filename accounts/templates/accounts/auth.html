@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login & Signup | Tradehub</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static "css/auth.css" %}">
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container nav-container">
+        <a href="{% url "core:home" %}" class="logo"
+          ><span><i class="fas fa-boxes-packing"></i></span> Tradehub</a
+        >
+        <nav class="desktop-nav">
+          <a href="{% url "core:home" %}">Home</a>
+          <a href="{% url "products:product_list" %}">Products</a>
+          <a href="{% url "accounts:dashboard" %}">Dashboard</a>
+        </nav>
+        <div class="mobile-controls">
+          <!-- Mobile core:home Link -->
+          <a href="{% url "core:home" %}" style="color: var(--secondary); font-size: 20px"
+            ><i class="fas fa-home"></i
+          ></a>
+        </div>
+      </div>
+    </header>
+
+    {% if messages %}
+  <div class="auth-messages">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} js-alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+    <!-- Auth Section -->
+    <section class="auth-section">
+      <div class="auth-container" id="container">
+        <!-- Sign Up Form -->
+        <div class="form-container sign-up-container">
+          <form id="signupForm" method="POST" action="{% url "accounts:signup" %}" onsubmit="handleAuth(event, 'signup')">
+            {% csrf_token %}
+            <h1>Create Account</h1>
+            <span class="subtitle">or use your email for registration</span>
+
+            <!-- Role Selector -->
+<div class="role-selector">
+  <div class="role-btn active" onclick="setRole('buyer', this)">
+    Buyer
+  </div>
+  <div class="role-btn" onclick="setRole('seller', this)">
+    Seller
+  </div>
+</div>
+
+<input type="hidden" name="role" id="roleInput" value="buyer" />
+
+<input type="text" name="name" placeholder="Name" required />
+<input type="email" name="email" placeholder="Email" required />
+<input type="text" name="phone" placeholder="Phone Number" required />
+<input type="password" name="password1" placeholder="Password" required />
+<input type="password" name="password2" placeholder="Confirm Password" required />
+
+<button class="btn-primary">Sign Up</button>
+
+
+            <!-- Mobile Only Link -->
+            <p class="mobile-toggle-text">
+              Already have an account? <a id="mobileSignIn">Sign In</a>
+            </p>
+          </form>
+        </div>
+
+        <!-- Sign In Form -->
+        <div class="form-container sign-in-container">
+          <form
+            id="loginForm"
+            action="{% url "accounts:login" %}"
+            method="POST"
+
+          >
+            {% csrf_token %}
+            <h1>Sign in</h1>
+            <div class="social-container">
+              <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social">
+                <i class="fab fa-google-plus-g"></i>
+              </a>
+              <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span class="subtitle">or use your account</span>
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <a
+              href="#"
+              style="
+                font-size: 12px;
+                color: #333;
+                margin: 15px 0;
+                text-decoration: underline;
+              "
+              >Forgot your password?</a
+            >
+            <button class="btn-primary">Sign In</button>
+
+            <!-- Mobile Only Link -->
+            <p class="mobile-toggle-text">
+              New here? <a id="mobileSignUp">Sign Up</a>
+            </p>
+          </form>
+        </div>
+
+        <!-- Overlay Container (Desktop Animation) -->
+        <div class="overlay-container">
+          <div class="overlay">
+            <div class="overlay-panel overlay-left">
+              <h1 style="text-shadow: 0 5px 15px black;">Welcome Back!</h1>
+              <p style="margin: 20px 0">
+                To keep connected with your traders and track your orders,
+                please login with your personal info
+              </p>
+              <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+              <h1 style="text-shadow: 0 5px 15px black;">Hello, Friend!</h1>
+              <p style="margin: 20px 0">
+                Enter your personal details and start your journey with
+                Nigeria's largest wholesale market
+              </p>
+              <button class="ghost" id="signUp">Sign Up</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>About Tradehub</h4>
+            <p>
+              Bridging the gap between Aba manufacturers and Nigerian retailers.
+              We ensure quality, trust, and speed.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url "core:home" %}">Home</a></li>
+              <li><a href="{% url "products:product_list" %}">Products</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Blog</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>For Sellers</h4>
+            <ul>
+              <li><a href="#">Join as Trader</a></li>
+              <li><a href="#">Seller Rules</a></li>
+              <li><a href="#">Success Stories</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li><i class="fas fa-envelope"></i> help@Tradehub.ng</li>
+              <li><i class="fas fa-phone"></i> +234 800 123 4567</li>
+              <li><i class="fas fa-map-marker-alt"></i> Aba, Abia State</li>
+            </ul>
+          </div>
+        </div>
+        <div class="copyright">
+          &copy; 2025 Tradehub Nigeria. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      // DOM Elements
+      const container = document.getElementById("container");
+      const signUpBtn = document.getElementById("signUp");
+      const signInBtn = document.getElementById("signIn");
+
+      // Mobile Toggles
+      const mobileSignUp = document.getElementById("mobileSignUp");
+      const mobileSignIn = document.getElementById("mobileSignIn");
+
+      // Functions to switch panels
+      function activateSignUp() {
+        container.classList.add("right-panel-active");
+      }
+
+      function activateSignIn() {
+        container.classList.remove("right-panel-active");
+      }
+      
+      // Event Listeners (Desktop)
+      signUpBtn.addEventListener("click", activateSignUp);
+      signInBtn.addEventListener("click", activateSignIn);
+
+      // Event Listeners (Mobile)
+      mobileSignUp.addEventListener("click", activateSignUp);
+      mobileSignIn.addEventListener("click", activateSignIn);
+
+      // Role Selection Logic
+      function setRole(role, element) {
+        // Remove active class from all
+        document
+          .querySelectorAll(".role-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        // Add to clicked
+        element.classList.add("active");
+        // Set hidden input
+        document.getElementById("roleInput").value = role;
+      }
+      function handleAuth(e, type) {
+        e.preventDefault(); // stop normal submit
+
+        const form = e.target;
+        const btn = form.querySelector("button");
+        const originalText = btn.innerText;
+
+        // Show processing effect
+        btn.innerText = "Processing...";
+        btn.style.opacity = "0.7";
+        btn.disabled = true;
+
+        // Delay real submission to show effect
+        setTimeout(() => {
+          form.submit(); // now actually submit the form to Django
+        }, 1000); // 1 second delay
+      }
+
+      // Auto-dismiss Django messages
+  document.addEventListener("DOMContentLoaded", () => {
+    const alerts = document.querySelectorAll(".js-alert");
+
+    alerts.forEach((alert) => {
+      // Wait before fading out
+      setTimeout(() => {
+        alert.style.opacity = "0";
+        alert.style.transform = "translateY(-10px)";
+
+        // Remove from DOM after animation
+        setTimeout(() => {
+          alert.remove();
+        }, 500);
+      }, 4000); // 4 seconds visible
+    });
+  });
+
+    </script>
+  </body>
+</html>

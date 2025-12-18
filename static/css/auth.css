@@ -1,0 +1,459 @@
+/* --- 1. GLOBAL VARIABLES & RESET (From core:home.html) --- */
+:root {
+  --primary: #ff6b35;
+  --primary-hover: #e55a2b;
+  --secondary: #1a2b4a;
+  --text-dark: #333333;
+  --text-light: #666666;
+  --white: #ffffff;
+  --light-grey: #f5f5f5;
+  --border: #e0e0e0;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --transition: all 0.6s ease-in-out; /* Slower for the slide effect */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text-dark);
+  background: var(--light-grey);
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+  color: var(--secondary);
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: 0.3s;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- 2. HEADER (From core:home.html) --- */
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--white);
+  z-index: 999;
+  box-shadow: var(--shadow);
+}
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+.logo {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.logo span {
+  color: var(--primary);
+}
+.desktop-nav {
+  display: none;
+  gap: 30px;
+  align-items: center;
+  font-weight: 500;
+}
+.mobile-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+@media (min-width: 769px) {
+  .desktop-nav {
+    display: flex;
+  }
+  .mobile-controls {
+    display: none;
+  }
+}
+
+/* --- 3. DYNAMIC AUTH CONTAINER STYLES --- */
+.auth-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  padding: 40px 20px;
+}
+
+.auth-container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  width: 900px;
+  max-width: 100%;
+  min-height: 600px; /* Tall enough for signup form */
+}
+
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: var(--transition);
+}
+
+/* Sign In (Login) Form */
+.sign-in-container {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+/* Sign Up Form */
+.sign-up-container {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+}
+
+/* Active State Animation */
+.auth-container.right-panel-active .sign-in-container {
+  transform: translateX(100%);
+}
+
+.auth-container.right-panel-active .sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: show 0.6s;
+}
+
+@keyframes show {
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+/* --- 4. OVERLAY STYLES (The Sliding Panel) --- */
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: var(--transition);
+  z-index: 100;
+}
+
+.auth-container.right-panel-active .overlay-container {
+  transform: translateX(-100%);
+}
+
+.overlay {
+  background: linear-gradient(to right, #1a2b4a84, #2c426b76),
+    url(/static/img/hero-img.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #ffffff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: var(--transition);
+}
+.overlay h1 {
+  color: var(--primary-hover);
+}
+.auth-container.right-panel-active .overlay {
+  transform: translateX(50%);
+}
+
+.overlay-panel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: var(--transition);
+}
+
+.overlay-left {
+  transform: translateX(-20%);
+}
+.auth-container.right-panel-active .overlay-left {
+  transform: translateX(0);
+}
+.overlay-right {
+  right: 0;
+  transform: translateX(0);
+}
+.auth-container.right-panel-active .overlay-right {
+  transform: translateX(20%);
+}
+
+/* --- 5. FORM ELEMENTS --- */
+form {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 50px;
+  height: 100%;
+  text-align: center;
+}
+
+form h1 {
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 15px;
+  font-size: 28px;
+}
+.social-container {
+  margin: 15px 0;
+}
+.social-container a {
+  border: 1px solid #dddddd;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  height: 40px;
+  width: 40px;
+  color: var(--secondary);
+}
+.social-container a:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+span.subtitle {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 15px;
+}
+
+input {
+  background-color: #f4f8f5;
+  border: 1px solid #eee;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+  border-radius: 4px;
+  font-family: "Inter", sans-serif;
+  outline: none;
+  transition: 0.3s;
+}
+input:focus {
+  border-color: var(--primary);
+  background: #fff;
+}
+
+.role-selector {
+  display: flex;
+  background: #f0f0f0;
+  border-radius: 5px;
+  padding: 4px;
+  margin: 10px 0 20px;
+  width: 100%;
+}
+.role-btn {
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  transition: 0.3s;
+}
+.role-btn.active {
+  background: var(--white);
+  color: var(--primary);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button.btn-primary {
+  border-radius: 20px;
+  border: 1px solid var(--primary);
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+  cursor: pointer;
+  margin-top: 20px;
+}
+button.btn-primary:active {
+  transform: scale(0.95);
+}
+
+button.ghost {
+  background-color: transparent;
+  border-color: #ffffff;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 20px;
+  padding: 12px 45px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 15px;
+}
+button.ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-toggle-text {
+  display: none;
+  margin-top: 15px;
+  font-size: 14px;
+}
+.mobile-toggle-text a {
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* --- 6. MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+  .auth-container {
+    width: 100%;
+    min-height: 650px;
+    box-shadow: none;
+    background: transparent;
+  }
+  .form-container {
+    width: 100%;
+    height: auto;
+    position: relative;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Hide the sliding overlay on mobile */
+  .overlay-container {
+    display: none;
+  }
+
+  /* Logic for mobile toggle */
+  .sign-in-container {
+    display: block;
+    z-index: 5;
+  }
+  .sign-up-container {
+    display: none;
+    opacity: 1;
+    z-index: 5;
+    transform: none;
+    animation: none;
+  }
+
+  .auth-container.right-panel-active .sign-in-container {
+    display: none;
+    transform: none;
+  }
+  .auth-container.right-panel-active .sign-up-container {
+    display: block;
+    transform: none;
+    animation: fadeIn 0.5s;
+  }
+
+  form {
+    padding: 30px 20px;
+  }
+  .mobile-toggle-text {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* --- FOOTER --- */
+footer {
+  background: #152238;
+  color: #d1d1d1;
+  padding: 60px 0 20px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+.footer-col h4 {
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+.footer-col a:hover {
+  color: var(--primary);
+}
+.copyright {
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  font-size: 14px;
+}
+@media (min-width: 769px) {
+  .footer-grid {
+    grid-template-columns: repeat(4, 1fr);
+    text-align: left;
+  }
+}

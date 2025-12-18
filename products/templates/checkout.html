@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Checkout | Tradehub</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      /* --- GLOBAL VARIABLES & RESET (Matches core:home.html) --- */
+      :root {
+        --primary: #ff6b35;
+        --primary-hover: #e55a2b;
+        --secondary: #1a2b4a;
+        --text-dark: #333333;
+        --text-light: #666666;
+        --white: #ffffff;
+        --light-grey: #f5f5f5;
+        --border: #e0e0e0;
+        --success: #4caf50;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--text-dark);
+        background: #f4f7fa;
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Poppins", sans-serif;
+        color: var(--secondary);
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: var(--transition);
+      }
+      input,
+      select {
+        font-family: "Inter", sans-serif;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* --- HEADER (Matches core:home.html) --- */
+      .header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        z-index: 999;
+        box-shadow: var(--shadow);
+      }
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+      }
+      .logo {
+        font-family: "Poppins", sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .logo span {
+        color: var(--primary);
+      }
+      .desktop-nav {
+        display: none;
+        gap: 30px;
+        align-items: center;
+        font-weight: 500;
+      }
+      .mobile-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      @media (min-width: 769px) {
+        .desktop-nav {
+          display: flex;
+        }
+        .mobile-controls {
+          display: none;
+        }
+      }
+
+      /* --- CHECKOUT LAYOUT --- */
+      .checkout-section {
+        padding: 40px 0 80px;
+      }
+
+      .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      /* Left Column */
+      .checkout-form-area {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--white);
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+        border: 1px solid transparent;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .step-number {
+        width: 32px;
+        height: 32px;
+        background: var(--secondary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      /* Forms */
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--text-light);
+      }
+
+      .input-field {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 15px;
+        transition: var(--transition);
+      }
+      .input-field:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+      }
+      .input-field.error {
+        border-color: red;
+      }
+      .error-text {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      /* Shipping Options */
+      .shipping-option {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: var(--transition);
+      }
+      .shipping-option:hover {
+        background: #fdfdfd;
+        border-color: #ccc;
+      }
+      .shipping-option.selected {
+        border-color: var(--primary);
+        background: rgba(255, 107, 53, 0.05);
+        position: relative;
+      }
+      .shipping-check {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .shipping-option.selected .shipping-check {
+        border-color: var(--primary);
+      }
+      .shipping-option.selected .shipping-check::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        background: var(--primary);
+        border-radius: 50%;
+      }
+
+      /* Payment Tabs */
+      .payment-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .tab-btn.active {
+        background: var(--secondary);
+        color: white;
+        border-color: var(--secondary);
+      }
+
+      .payment-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+      .payment-content.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Right Column (Summary) */
+      .order-summary-container {
+        position: sticky;
+        top: 100px;
+        h-index: 10;
+      }
+
+      .cart-item {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+      }
+      .cart-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #eee;
+      }
+      .item-info h4 {
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+      .item-meta {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 14px;
+        color: var(--text-light);
+      }
+      .summary-total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px solid #eee;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--secondary);
+      }
+
+      .btn-checkout {
+        width: 100%;
+        padding: 16px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: var(--transition);
+      }
+      .btn-checkout:hover {
+        background: var(--primary-hover);
+      }
+      .btn-checkout:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+      }
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .modal {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+        transform: scale(0.8);
+        transition: var(--transition);
+      }
+      .modal-overlay.active .modal {
+        transform: scale(1);
+      }
+      .success-icon {
+        font-size: 60px;
+        color: var(--success);
+        margin-bottom: 20px;
+      }
+
+      /* Responsive */
+      @media (min-width: 900px) {
+        .checkout-grid {
+          grid-template-columns: 1.8fr 1fr;
+        }
+        .form-row {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* Footer (Matches core:home.html) */
+      footer {
+        background: #152238;
+        color: #d1d1d1;
+        padding: 60px 0 20px;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 40px;
+      }
+      @media (min-width: 769px) {
+        .footer-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      .copyright {
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 20px;
+        font-size: 14px;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container nav-container">
+        <a href="core:home.html" class="logo"
+          ><span><i class="fas fa-boxes-packing"></i></span> Tradehub</a
+        >
+        <nav class="desktop-nav">
+          <a href="core:home">Home</a>
+          <a href="product_list.html">Products</a>
+          <a href="{% url "accounts:dashboard" %}">Dashboard</a>
+          <a href="#">Contact Support</a>
+        </nav>
+        <div class="mobile-controls">
+          <a href="core:home.html" style="font-size: 14px; font-weight: 600"
+            >Cancel</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container checkout-section">
+      <h1 style="margin-bottom: 30px; font-size: 28px">Checkout</h1>
+
+      <form id="checkoutForm" onsubmit="processOrder(event)">
+        <div class="checkout-grid">
+          <!-- LEFT COLUMN: INPUTS -->
+          <div class="checkout-form-area">
+            <!-- Step 1: Contact -->
+            <div class="card">
+              <div class="card-header">
+                <div class="step-number">1</div>
+                <h3>Contact & Shipping</h3>
+              </div>
+
+              <div class="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  class="input-field"
+                  placeholder="e.g. John Doe"
+                  required
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <input
+                    type="tel"
+                    id="phoneInput"
+                    class="input-field"
+                    placeholder="080..."
+                    required
+                  />
+                  <div class="error-text" id="phoneError">
+                    Invalid Nigerian phone number
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Email Address</label>
+                  <input
+                    type="email"
+                    class="input-field"
+                    placeholder="name@email.com"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Street Address</label>
+                <input
+                  type="text"
+                  class="input-field"
+                  placeholder="House number and street name"
+                  required
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>State</label>
+                  <select class="input-field" required>
+                    <option value="">Select State</option>
+                    <option value="Lagos">Lagos</option>
+                    <option value="Abuja">Abuja</option>
+                    <option value="Kano">Kano</option>
+                    <option value="Abia">Abia</option>
+                    <option value="Rivers">Rivers</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text" class="input-field" required />
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Delivery -->
+            <div class="card">
+              <div class="card-header">
+                <div class="step-number">2</div>
+                <h3>Delivery Method</h3>
+              </div>
+
+              <div
+                class="shipping-option selected"
+                onclick="selectShipping(this, 3000)"
+              >
+                <div style="display: flex; align-items: center; gap: 15px">
+                  <div class="shipping-check"></div>
+                  <div>
+                    <strong>Standard Waybill</strong>
+                    <div style="font-size: 13px; color: #666">
+                      Pickup at Park (3-5 days)
+                    </div>
+                  </div>
+                </div>
+                <strong>₦3,000</strong>
+              </div>
+
+              <div class="shipping-option" onclick="selectShipping(this, 6000)">
+                <div style="display: flex; align-items: center; gap: 15px">
+                  <div class="shipping-check"></div>
+                  <div>
+                    <strong>Express Door Delivery</strong>
+                    <div style="font-size: 13px; color: #666">
+                      core:home/Office Delivery (2-3 days)
+                    </div>
+                  </div>
+                </div>
+                <strong>₦6,000</strong>
+              </div>
+              <!-- Hidden input to store value -->
+              <input type="hidden" id="shippingCost" value="3000" />
+            </div>
+
+            <!-- Step 3: Payment -->
+            <div class="card">
+              <div class="card-header">
+                <div class="step-number">3</div>
+                <h3>Payment Method</h3>
+              </div>
+
+              <div class="payment-tabs">
+                <div class="tab-btn active" onclick="switchTab('card', this)">
+                  <i class="far fa-credit-card"></i> Card
+                </div>
+                <div class="tab-btn" onclick="switchTab('transfer', this)">
+                  <i class="fas fa-university"></i> Transfer
+                </div>
+                <div class="tab-btn" onclick="switchTab('ussd', this)">
+                  <i class="fas fa-mobile-alt"></i> USSD
+                </div>
+              </div>
+
+              <!-- Card Form -->
+              <div id="card" class="payment-content active">
+                <div class="form-group">
+                  <label>Card Number</label>
+                  <div style="position: relative">
+                    <input
+                      type="text"
+                      class="input-field"
+                      placeholder="0000 0000 0000 0000"
+                    />
+                    <i
+                      class="fab fa-cc-mastercard"
+                      style="
+                        position: absolute;
+                        right: 15px;
+                        top: 12px;
+                        font-size: 20px;
+                        color: #666;
+                      "
+                    ></i>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Expiry Date</label>
+                    <input
+                      type="text"
+                      class="input-field"
+                      placeholder="MM/YY"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" class="input-field" placeholder="123" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Transfer Info -->
+              <div id="transfer" class="payment-content">
+                <div
+                  style="
+                    background: #eef2f6;
+                    padding: 15px;
+                    border-radius: 6px;
+                    text-align: center;
+                  "
+                >
+                  <p style="font-size: 14px; margin-bottom: 5px">
+                    Transfer exact amount to:
+                  </p>
+                  <h3 style="color: var(--secondary); font-size: 20px">
+                    123 456 7890
+                  </h3>
+                  <p><strong>Tradehub Escrow Acct</strong></p>
+                  <p>GTBank</p>
+                  <hr
+                    style="
+                      margin: 10px 0;
+                      border: 0;
+                      border-top: 1px solid #ddd;
+                    "
+                  />
+                  <small
+                    >Your order will be processed once payment is
+                    confirmed.</small
+                  >
+                </div>
+              </div>
+
+              <!-- USSD Info -->
+              <div id="ussd" class="payment-content">
+                <div style="text-align: center; padding: 20px">
+                  <p>Dial the code below to pay:</p>
+                  <h2 style="color: var(--primary); margin: 15px 0">
+                    *737*000*849#
+                  </h2>
+                  <p style="font-size: 12px; color: #666">
+                    Valid for Opay users. Other banks coming soon.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: SUMMARY -->
+          <div class="checkout-summary">
+            <div class="card order-summary-container">
+              <h3>Order Summary</h3>
+              <div style="margin-top: 20px">
+                <!-- Item 1 -->
+                <div class="cart-item">
+                  <img
+                    src="https://placehold.co/100x100/FF6B35/white?text=A"
+                    class="cart-img"
+                  />
+                  <div class="item-info">
+                    <h4>Men's Senator Wear</h4>
+                    <div class="item-meta">Size: L • Qty: 20</div>
+                    <div style="font-weight: 600; margin-top: 5px">
+                      ₦170,000
+                    </div>
+                  </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="cart-item">
+                  <img
+                    src="https://placehold.co/100x100/1A2B4A/white?text=B"
+                    class="cart-img"
+                  />
+                  <div class="item-info">
+                    <h4>Leather Loafers</h4>
+                    <div class="item-meta">Size: 42 • Qty: 5</div>
+                    <div style="font-weight: 600; margin-top: 5px">₦25,000</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 20px">
+                <div class="summary-row">
+                  <span>Subtotal</span>
+                  <span>₦195,000</span>
+                </div>
+                <div class="summary-row">
+                  <span>Shipping</span>
+                  <span id="summaryShipping">₦3,000</span>
+                </div>
+                <div class="summary-row">
+                  <span>Tax (7.5%)</span>
+                  <span>₦14,625</span>
+                </div>
+                <div class="summary-total">
+                  <span>Total</span>
+                  <span id="summaryTotal">₦212,625</span>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-checkout" id="payBtn">
+                Pay <span id="btnAmount">₦212,625</span>
+              </button>
+
+              <div
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  font-size: 12px;
+                  color: #888;
+                "
+              >
+                <i class="fas fa-lock"></i> Secured by Paystack
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+      <div class="modal">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h2>Order Placed!</h2>
+        <p style="color: #666; margin: 15px 0">
+          Thank you for your order. Your tracking number is
+          <strong>#TRD-8829</strong>.
+        </p>
+        <a
+          href="dashboard.html"
+          class="btn-checkout"
+          style="
+            display: inline-block;
+            width: auto;
+            padding: 10px 30px;
+            text-decoration: none;
+          "
+          >Go to Dashboard</a
+        >
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <h4 style="color: white; margin-bottom: 15px">Tradehub</h4>
+            <p style="font-size: 14px; opacity: 0.8">
+              Connecting retailers to Aba's finest manufacturers.
+            </p>
+          </div>
+          <div>
+            <h4 style="color: white; margin-bottom: 15px">Help</h4>
+            <ul
+              style="
+                list-style: none;
+                font-size: 14px;
+                opacity: 0.8;
+                line-height: 2;
+              "
+            >
+              <li>Shipping Info</li>
+              <li>Returns</li>
+              <li>FAQ</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="color: white; margin-bottom: 15px">Company</h4>
+            <ul
+              style="
+                list-style: none;
+                font-size: 14px;
+                opacity: 0.8;
+                line-height: 2;
+              "
+            >
+              <li>About Us</li>
+              <li>Careers</li>
+              <li>Blog</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="color: white; margin-bottom: 15px">Contact</h4>
+            <ul
+              style="
+                list-style: none;
+                font-size: 14px;
+                opacity: 0.8;
+                line-height: 2;
+              "
+            >
+              <li><i class="fas fa-phone"></i> +234 800 123 4567</li>
+              <li><i class="fas fa-envelope"></i> help@Tradehub.ng</li>
+            </ul>
+          </div>
+        </div>
+        <div class="copyright">
+          &copy; 2025 Tradehub Nigeria. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // --- CALCULATION LOGIC ---
+      const subtotal = 195000;
+      const tax = 14625;
+      let currentShipping = 3000;
+
+      function updateTotals() {
+        const total = subtotal + tax + currentShipping;
+
+        // Format Currency
+        const fmt = (num) => "₦" + num.toLocaleString();
+
+        document.getElementById("summaryShipping").innerText =
+          fmt(currentShipping);
+        document.getElementById("summaryTotal").innerText = fmt(total);
+        document.getElementById("btnAmount").innerText = fmt(total);
+      }
+
+      // --- INTERACTIVITY ---
+
+      // 1. Shipping Selection
+      function selectShipping(element, price) {
+        // Remove selected class from all
+        document
+          .querySelectorAll(".shipping-option")
+          .forEach((el) => el.classList.remove("selected"));
+        // Add to clicked
+        element.classList.add("selected");
+
+        // Update state
+        currentShipping = price;
+        document.getElementById("shippingCost").value = price;
+
+        // Recalculate
+        updateTotals();
+      }
+
+      // 2. Payment Tab Switching
+      function switchTab(tabId, btn) {
+        // Reset Tabs
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document
+          .querySelectorAll(".payment-content")
+          .forEach((c) => c.classList.remove("active"));
+
+        // Activate Clicked
+        btn.classList.add("active");
+        document.getElementById(tabId).classList.add("active");
+      }
+
+      // 3. Form Validation & Submission
+      function processOrder(e) {
+        e.preventDefault();
+
+        const phone = document.getElementById("phoneInput").value;
+        const phoneError = document.getElementById("phoneError");
+        const btn = document.getElementById("payBtn");
+        const modal = document.getElementById("successModal");
+
+        // Simple Nigerian Phone Regex (070, 080, 081, 090, 091 + 7 digits)
+        const phoneRegex = /^0[789][01]\d{8}$/;
+
+        if (!phoneRegex.test(phone.replace(/\s/g, ""))) {
+          document.getElementById("phoneInput").classList.add("error");
+          phoneError.style.display = "block";
+          // Scroll to error
+          document
+            .getElementById("phoneInput")
+            .scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        } else {
+          document.getElementById("phoneInput").classList.remove("error");
+          phoneError.style.display = "none";
+        }
+
+        // Loading State
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+
+        // Simulate API Call
+        setTimeout(() => {
+          modal.classList.add("active");
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }, 2000);
+      }
+
+      // Init
+      updateTotals();
+    </script>
+  </body>
+</html>
