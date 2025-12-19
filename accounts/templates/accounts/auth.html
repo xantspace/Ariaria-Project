@@ -160,14 +160,14 @@
             <ul>
               <li><a href="{% url "core:home" %}">Home</a></li>
               <li><a href="{% url "products:product_list" %}">Products</a></li>
-              <li><a href="#">About Us</a></li>
+              <li><a href="{% url "core:home" %}#about">About Us</a></li>
               <li><a href="#">Blog</a></li>
             </ul>
           </div>
           <div class="footer-col">
             <h4>For Sellers</h4>
             <ul>
-              <li><a href="#">Join as Trader</a></li>
+              <li><a href="{% url "accounts:auth" %}">Join as Trader</a></li>
               <li><a href="#">Seller Rules</a></li>
               <li><a href="#">Success Stories</a></li>
             </ul>
