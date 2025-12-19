@@ -41,6 +41,7 @@
         color: var(--text-dark);
         background: var(--white);
         overflow-x: hidden;
+        outline: none;
       }
       h1,
       h2,
@@ -494,7 +495,7 @@
 
         <nav class="desktop-nav">
           <a href="{% url "core:home" %}">Home</a>
-          <a href="{% url "products:product_list" %}">Products</a>
+          <a href="{% url "products:product_list" %}">Marketplace</a>
           <a href="{% url "accounts:auth" %}"><i class="far fa-user"></i> Login</a>
           <a href="{% url "products:cart" %}"><i class="fas fa-shopping-cart"></i></a>
         </nav>
@@ -517,7 +518,7 @@
       </div>
       <ul class="sidebar-links">
         <li><a href="{% url "core:home" %}">Home</a></li>
-        <li><a href="{% url "products:product_list" %}">All Products</a></li>
+        <li><a href="{% url "products:product_list" %}">Marketplace</a></li>
         <li><a href="#">Categories</a></li>
         <li><a href="#">How it Works</a></li>
         <li><a href="{% url "accounts:auth" %}">Login / Signup</a></li>
