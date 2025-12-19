@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tradehub | Nigeria's B2B Wholesale Platform</title>
+    <title>Ariaria | Nigeria's B2B Wholesale Platform</title>
     <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
@@ -483,7 +483,7 @@
     <header class="header" id="header">
       <div class="container nav-container">
         <div class="mobile-controls">
-          <a href="{% url "core:home" %}" class="logo"><span>Tradehub</span></a>
+          <a href="{% url "core:home" %}" class="logo"><span>Ariaria</span></a>
         </div>
 
         <input
@@ -507,7 +507,7 @@
     <nav class="sidebar-nav" id="sidebar">
       <div class="sidebar-header">
         <div class="logo">
-          <span>Tradehub</span> 
+          <span>Ariaria</span> 
         </div>
         <i
           class="fas fa-times"
@@ -517,7 +517,7 @@
       </div>
       <ul class="sidebar-links">
         <li><a href="{% url "core:home" %}">Home</a></li>
-        <li><a href="product_list.html">All Products</a></li>
+        <li><a href="{% url "products:product_list" %}">All Products</a></li>
         <li><a href="#">Categories</a></li>
         <li><a href="#">How it Works</a></li>
         <li><a href="{% url "accounts:auth" %}">Login / Signup</a></li>
@@ -530,7 +530,7 @@
     <section class="hero">
       <div class="container">
         <h1>
-          Tradehub: <br /><span>Nigeria's Premier B2B Wholesale Platform</span>
+          Ariaria: <br /><span>Nigeria's Premier B2B Wholesale Platform</span>
         </h1>
         <p>
           Connect directly with 500+ Verified Aba Market Traders. Factory
@@ -665,165 +665,7 @@
       </div>
     </section>
 
-    <section class="section-padding">
-      <div class="container">
-        <h2 style="margin-bottom: 30px; text-align: center">
-          Shoes & Footwear
-        </h2>
-        <div class="category-grid">
-          <!-- 6 Categories -->
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-female cat-icon"></i>
-            <div class="cat-name">Women's Clothing</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-tshirt cat-icon"></i>
-            <div class="cat-name">Men's Clothing</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-shoe-prints cat-icon"></i>
-            <div class="cat-name">Shoes & Footwear</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-shopping-bag cat-icon"></i>
-            <div class="cat-name">Bags & Luggage</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-glasses cat-icon"></i>
-            <div class="cat-name">Accessories</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-scroll cat-icon"></i>
-            <div class="cat-name">Fabrics & Textiles</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-padding">
-      <div class="container">
-        <h2 style="margin-bottom: 30px; text-align: center">
-          Bags & Luggage
-        </h2>
-        <div class="category-grid">
-          <!-- 6 Categories -->
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-female cat-icon"></i>
-            <div class="cat-name">Women's Clothing</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-tshirt cat-icon"></i>
-            <div class="cat-name">Men's Clothing</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-shoe-prints cat-icon"></i>
-            <div class="cat-name">Shoes & Footwear</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-shopping-bag cat-icon"></i>
-            <div class="cat-name">Bags & Luggage</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-glasses cat-icon"></i>
-            <div class="cat-name">Accessories</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-scroll cat-icon"></i>
-            <div class="cat-name">Fabrics & Textiles</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-padding">
-      <div class="container">
-        <h2 style="margin-bottom: 30px; text-align: center">
-          Accessories
-        </h2>
-        <div class="category-grid">
-          <!-- 6 Categories -->
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-female cat-icon"></i>
-            <div class="cat-name">Women's Clothing</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-tshirt cat-icon"></i>
-            <div class="cat-name">Men's Clothing</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-shoe-prints cat-icon"></i>
-            <div class="cat-name">Shoes & Footwear</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-shopping-bag cat-icon"></i>
-            <div class="cat-name">Bags & Luggage</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-glasses cat-icon"></i>
-            <div class="cat-name">Accessories</div>
-          </div>
-          <div
-            class="cat-card"
-            onclick="window.location.href='product_list.html'"
-          >
-            <i class="fas fa-scroll cat-icon"></i>
-            <div class="cat-name">Fabrics & Textiles</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    
     <section class="section-padding">
       <div class="container">
         <h2 style="margin-bottom: 30px; text-align: center">
@@ -1148,7 +990,7 @@
       <div class="container">
         <div class="footer-grid">
           <div class="footer-col">
-            <h4>About Tradehub</h4>
+            <h4>About Ariaria</h4>
             <p>
               Bridging the gap between Aba manufacturers and Nigerian retailers.
               We ensure quality, trust, and speed.
@@ -1174,14 +1016,14 @@
           <div class="footer-col">
             <h4>Contact</h4>
             <ul>
-              <li><i class="fas fa-envelope"></i> help@Tradehub.ng</li>
+              <li><i class="fas fa-envelope"></i> help@Ariaria.ng</li>
               <li><i class="fas fa-phone"></i> +234 800 123 4567</li>
               <li><i class="fas fa-map-marker-alt"></i> Aba, Abia State</li>
             </ul>
           </div>
         </div>
         <div class="copyright">
-          &copy; 2025 Tradehub Nigeria. All rights reserved.
+          &copy; 2025 Ariaria Nigeria. All rights reserved.
         </div>
       </div>
     </footer>
