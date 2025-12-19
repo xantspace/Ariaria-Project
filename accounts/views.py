@@ -151,6 +151,13 @@ def seller_dashboard(request):
                 'buyer': 'Chinedu Retail',
                 'status': 'paid',
             },
+            {
+                'id': '8831',
+                'product': 'Johnkoso',
+                'quantity': 50,
+                'buyer': 'Kingsley Retail',
+                'status': 'pending',
+            },
         ],
     }
 
